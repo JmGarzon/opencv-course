@@ -1,12 +1,23 @@
 import cv2 as cv
 
 
+def rescaleFrame(frame, scale=0.75):
+    width = int(frame.shape[1] * scale)
+    height = int(frame.shape[0] * scale)
+    dimensions = (width, height)
+    return cv.resize(frame, dimensions, interpolation=cv.INTER_AREA)
+
+
 def read_cat():
     # Looks for an image's path and returns its matrix of pixels
     img = cv.imread('./Resources/Photos/cat_large.jpg')
     cv.imshow('Cat', img)
+
+    img_resized = rescaleFrame(img)
+    cv.imshow('Resized Cat', img_resized)
     # Waits for a key to be pressed
     cv.waitKey(0)
+
 
 def read_dog_video():
     """
@@ -25,10 +36,13 @@ def read_dog_video():
         # To show the video frame by frame
         cv.imshow('Video', frame)
 
+        # To show a resized video
+        resized_frame = rescaleFrame(frame)
+        cv.imshow('Resized video', resized_frame)
+
         # To stop reproducing the video if the d key is pressed
-        if cv.waitKey(20) & 0xFF==ord('d'):
+        if cv.waitKey(20) & 0xFF == ord('d'):
             break
 
     capture.release()
     cv.destroyAllWindows()
-
